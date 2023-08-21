@@ -20,4 +20,4 @@ _Note: Ensure that the Python version you are using is compatible with the `stri
 
 ### Deleting your mistakes
 
-We all make mistakes sometimes. If you run the `generate_coupons.py` script and you realize, "oh wait, I def should not have done that" (not that I am speaking from experience or anything), you can run `python delete_coupons.py` with your Stripe API key and it's like it never happened.
+We all make mistakes sometimes. If you run the `generate_coupons.py` script and you realize, "oh wait, I def should not have done that" (not that I am speaking from experience or anything), you can run `python delete_coupons.py` with your Stripe API key _and_ the `coupons.csv` file and it'll be like it never happened.
