@@ -1,38 +1,29 @@
 import csv
 import stripe
 
+# Set your Stripe API key
 stripe.api_key = '<YOUR_STRIPE_SECRET_KEY>'
 
-# Create 1000 coupons
-coupon_count = 1000
-coupons = []
+# Create a coupon
+coupon = stripe.Coupon.create(
+    name='Unique Coupon',
+    duration='once',
+    amount_off=2000,  # $20 in cents
+    currency='usd',
+)
 
-for i in range(coupon_count):
-    coupon = stripe.Coupon.create(
-        amount_off=2000,  # $20 in cents
-        currency='usd',
-        duration='once',
-        name='Unique Coupon', # change this to whatever you want
-        metadata={
-            'coupon_number': str(i + 1)
-        }
-    )
+# Generate promotion codes
+promotion_codes = []
 
-    print(f"Created coupon with ID {coupon.id}")
+for _ in range(1000):
+    promotion_code = stripe.PromotionCode.create(coupon=coupon.id)
+    promotion_codes.append([promotion_code.code])
+    print(f"Generated promotion code {promotion_code.code}")
 
-    coupons.append(coupon)
+# Save promotion codes to a CSV file
+with open('promotion_codes.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerows(promotion_codes)
 
-# Save coupons to a CSV file
-filename = 'coupons.csv'
-fieldnames = ['Coupon ID']
-
-with open(filename, 'w', newline='') as file:
-    writer = csv.DictWriter(file, fieldnames=fieldnames)
-    writer.writeheader()
-
-    for coupon in coupons:
-        writer.writerow({
-            'Coupon ID': coupon.id
-        })
-
-print(f"Coupons saved to {filename}")
+print(
+    f"A total of {len(promotion_codes)} promo codes have been generated and saved to promotion_codes.csv.")
