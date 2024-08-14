@@ -16,7 +16,10 @@ coupon = stripe.Coupon.create(
 promotion_codes = []
 
 for _ in range(1000):
-    promotion_code = stripe.PromotionCode.create(coupon=coupon.id)
+    promotion_code = stripe.PromotionCode.create(
+        coupon=coupon.id,
+        max_redemptions=1, # This ensures each promo code can only be used once
+    )
     promotion_codes.append([promotion_code.code])
     print(f"Generated promotion code {promotion_code.code}")
 
